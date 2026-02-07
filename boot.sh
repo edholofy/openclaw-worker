@@ -7,19 +7,25 @@ mkdir -p /root/.openclaw/agents/main/agent /data/workspace
 echo "$OPENCLAW_CONFIG_B64" | base64 -d > /root/.openclaw/openclaw.json
 echo "[boot] Config written"
 
-cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
+export OPENCLAW_STATE_DIR=/root/.openclaw
+
+# Use openclaw onboard to properly register OpenRouter provider
+echo "[boot] Running openclaw onboard for OpenRouter..."
+openclaw onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY" 2>&1 || {
+  echo "[boot] Onboard failed, writing auth profile manually"
+  cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 {
   "profiles": {
-    "openai:default": {
+    "openrouter:default": {
       "type": "api_key",
-      "provider": "openai",
-      "apiKey": "${OPENAI_API_KEY}"
+      "provider": "openrouter",
+      "apiKey": "${OPENROUTER_API_KEY}"
     }
   }
 }
 AUTHEOF
-echo "[boot] Auth profiles written"
+}
+echo "[boot] Auth configured"
 
-export OPENCLAW_STATE_DIR=/root/.openclaw
 echo "[boot] Starting gateway..."
-exec node dist/index.js gateway
+exec openclaw gateway
