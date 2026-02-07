@@ -7,13 +7,12 @@ mkdir -p /root/.openclaw/agents/main/agent /data/workspace
 echo "$OPENCLAW_CONFIG_B64" | base64 -d > /root/.openclaw/openclaw.json
 echo "[boot] Config written"
 
-# Auth profile for the custom openrouter provider
 cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 {
   "profiles": {
-    "openrouter-custom:default": {
+    "openrouter:default": {
       "type": "api_key",
-      "provider": "openrouter-custom",
+      "provider": "openrouter",
       "apiKey": "${OPENROUTER_API_KEY}"
     }
   }
