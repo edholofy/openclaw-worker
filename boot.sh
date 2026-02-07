@@ -10,9 +10,9 @@ echo "[boot] Config written"
 cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 {
   "profiles": {
-    "openrouter:default": {
+    "openai:default": {
       "type": "api_key",
-      "provider": "openrouter",
+      "provider": "openai",
       "apiKey": "${OPENROUTER_API_KEY}"
     }
   }
@@ -20,7 +20,11 @@ cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 AUTHEOF
 echo "[boot] Auth profiles written"
 
+# Update to latest version (may add openrouter support / OPENAI_BASE_URL respect)
+echo "[boot] Updating OpenClaw..."
+npm i -g openclaw@latest 2>&1 | tail -3
+echo "[boot] Version: $(openclaw --version 2>/dev/null || echo 'unknown')"
+
 export OPENCLAW_STATE_DIR=/root/.openclaw
-echo "[boot] OpenClaw version: $(openclaw --version 2>/dev/null || echo unknown)"
 echo "[boot] Starting gateway..."
 exec openclaw gateway
