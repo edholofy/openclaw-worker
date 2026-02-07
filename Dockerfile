@@ -11,4 +11,4 @@ ENTRYPOINT ["/bin/sh", "-c"]
 # - Config file sets: port 8080, bind 0.0.0.0, HTTP endpoints, model
 # - exec replaces shell with node so it becomes PID 1 (proper signal handling)
 # - --allow-unconfigured: start without requiring interactive setup
-CMD ["mkdir -p /root/.openclaw /data/workspace && echo \"$OPENCLAW_CONFIG_B64\" | base64 -d > /root/.openclaw/openclaw.json && echo '[boot] Config file:' && cat /root/.openclaw/openclaw.json && echo '' && echo '[boot] Node version:' && node --version && echo '[boot] PWD:' && pwd && echo '[boot] Starting gateway...' && OPENCLAW_STATE_DIR=/root/.openclaw node dist/index.js gateway 2>&1"]
+CMD ["mkdir -p /root/.openclaw /data/workspace && echo \"$OPENCLAW_CONFIG_B64\" | base64 -d > /root/.openclaw/openclaw.json && echo '[boot] starting gateway' && OPENCLAW_STATE_DIR=/root/.openclaw exec node dist/index.js gateway"]
