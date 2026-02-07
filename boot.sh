@@ -1,6 +1,6 @@
 #!/bin/sh
 # OpenClaw Worker Boot Script
-# Writes config + auth from env vars, updates to latest, then starts the gateway.
+# Updates OpenClaw, writes config + auth from env vars, then starts the gateway.
 
 set -e
 
@@ -25,11 +25,12 @@ cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 AUTHEOF
 echo "[boot] Auth profiles written"
 
-# Update to latest version (v2026.2.3 → v2026.2.6+ adds openrouter provider support)
-echo "[boot] Updating OpenClaw..."
-node dist/index.js update --yes 2>&1 || echo "[boot] Update failed or not available, continuing with current version"
+# Update to latest version via npm (v2026.2.3 doesn't support openrouter model routing)
+echo "[boot] Updating OpenClaw via npm..."
+npm i -g openclaw@latest 2>&1 | tail -3
+echo "[boot] Update complete"
 
 # Start the gateway (exec replaces shell with node as PID 1)
 export OPENCLAW_STATE_DIR=/root/.openclaw
 echo "[boot] Starting gateway..."
-exec node dist/index.js gateway
+exec openclaw gateway
