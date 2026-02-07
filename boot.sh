@@ -10,8 +10,9 @@ echo "[boot] Config written"
 export OPENCLAW_STATE_DIR=/root/.openclaw
 
 # Use openclaw onboard to properly register OpenRouter provider
-echo "[boot] Running openclaw onboard for OpenRouter..."
-openclaw onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY" 2>&1 || {
+# The Docker image has node dist/index.js, not a global `openclaw` binary
+echo "[boot] Running onboard for OpenRouter..."
+node dist/index.js onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY" 2>&1 || {
   echo "[boot] Onboard failed, writing auth profile manually"
   cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 {
@@ -28,4 +29,4 @@ AUTHEOF
 echo "[boot] Auth configured"
 
 echo "[boot] Starting gateway..."
-exec openclaw gateway
+exec node dist/index.js gateway
