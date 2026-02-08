@@ -10,10 +10,10 @@ echo "[boot] Config written"
 cat > /root/.openclaw/agents/main/agent/auth-profiles.json << AUTHEOF
 {
   "profiles": {
-    "openrouter:default": {
+    "anthropic:default": {
       "type": "api_key",
-      "provider": "openrouter",
-      "apiKey": "${OPENROUTER_API_KEY}"
+      "provider": "anthropic",
+      "apiKey": "${ANTHROPIC_API_KEY}"
     }
   }
 }
