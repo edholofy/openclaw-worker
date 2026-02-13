@@ -42,7 +42,7 @@ if [ -n "$OPENCLAW_WORKSPACE_B64" ]; then
   if [ -f /data/workspace/.e2b/package.json ] && [ -n "$E2B_API_KEY" ]; then
     if [ ! -d /data/workspace/.e2b/node_modules/@e2b ]; then
       echo "[boot] Installing E2B SDK..."
-      cd /data/workspace/.e2b && npm install --production 2>&1 | tail -3
+      (cd /data/workspace/.e2b && npm install --production 2>&1 | tail -3)
       echo "[boot] E2B SDK installed"
     fi
   fi
